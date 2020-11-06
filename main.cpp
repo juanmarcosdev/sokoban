@@ -1,13 +1,21 @@
 #include <stdlib.h>
 #include <iostream>
+#include <typeinfo>
 #include "GameState.h"
+#include <fstream>
+#include <stdio.h>
+#include <ctype.h>
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-    GameState G(1, 2);
-    cout << G.getX() << endl;
-    G.sumX();
-    cout << G.getX() << endl;
+    ifstream file(argv[1]);
+    if(file.is_open()) {
+        string line;
+        while(getline(file, line)) {
+            cout << isdigit(line[0]) << endl;
+        }
+        file.close();
+    }
 }
