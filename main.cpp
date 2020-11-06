@@ -10,6 +10,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+    // Inicio: Leer archivo
     int filas = 0;
     int columnas = 0;
     int datos = 0;
@@ -35,13 +36,13 @@ int main(int argc, char* argv[])
         }
         file.close();
     }
-    cout << filas << endl;
-    cout << columnas << endl;
-    cout << datos << endl;
     char tablero[filas][columnas];
-    int coordenadas[datos][2];
+    int coordenadas[datos-1][2];
+    int posicion[2];
     ifstream file3(argv[1]);
     int contador = 0;
+    int contador2 = 0;
+    int contador3 = 0;
     if(file3.is_open()) {
         string line;
         while(getline(file3, line)) {
@@ -52,16 +53,22 @@ int main(int argc, char* argv[])
                     tablero[contador][i] = line[i];
                 } 
                 contador++;
+            } else if(line.length() == 3 && contador2 == 0)
+            {
+                posicion[0] = line[0] - '0';
+                posicion[1] = line[2] - '0';
+                contador2++;
+            } else if(line.length() == 3 && contador2 != 0)
+            {
+                coordenadas[contador3][0] = line[0] - '0';
+                coordenadas[contador3][1] = line[2] - '0';
+                contador3++;
             }
         }
         file3.close();
     }
-    for(int i = 0; i < filas; i++)
-    {
-        for(int j = 0; j < columnas; j++)
-        {
-            cout << tablero[i][j];
-        }
-        cout << endl;
-    }
+    // Fin: Leer archivo
+    // Tablero de juego almacenado en matriz "tablero"
+    // Coordenadas iniciales de las cajas guardadas en "coordenadas"
+    // Posicion inicial del jugador en "posicion"
 }
