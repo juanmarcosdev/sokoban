@@ -15,9 +15,21 @@ int main(int argc, char* argv[])
     ifstream file(argv[1]);
     if(file.is_open()) {
         string line;
-        while(getline(file, line)) {
-            cout << line.length() << endl;
+        getline(file, line);
+        anchoTablero = line.length();
+        file.close();
+    }
+    ifstream file2(argv[1]);
+    if(file2.is_open()) {
+        string line;
+        while(getline(file2, line)) {
+            if(line.length() != 3)
+            {
+                largoTablero++;
+            }
         }
         file.close();
     }
+    cout << largoTablero << endl;
+    cout << anchoTablero << endl;
 }
