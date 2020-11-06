@@ -2,18 +2,16 @@
 #include <iostream>
 #include "GameState.h"
 
-GameState::GameState(int x1, int y1)
+using namespace std;
+
+GameState::GameState(int filas_, int columnas_)
 {
-    this->x = x1;
-    this->y = y1;
+    this->filas = filas_;
+    this->columnas = columnas_;
 }
 
-int GameState::getX()
+void GameState::gimme()
 {
-    return this->x;
+    cout << this->filas << endl;
+    cout << this->columnas << endl;
 }
-
-void GameState::sumX()
-{
-    this->x = this->x + 1;
-} 

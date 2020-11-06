@@ -71,4 +71,6 @@ int main(int argc, char* argv[])
     // Tablero de juego almacenado en matriz "tablero"
     // Coordenadas iniciales de las cajas guardadas en "coordenadas"
     // Posicion inicial del jugador en "posicion"
+    GameState juego(filas, columnas);
+    juego.gimme();
 }

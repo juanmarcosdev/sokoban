@@ -8,14 +8,12 @@ using namespace std;
 class GameState
 {
   private:
-  int x;
-  int y;
+  int filas;
+  int columnas;
   
   public:
-  GameState(int x1, int y1);
-  int getX();
-  void sumX();
-
+  GameState(int filas_, int columnas_);
+  void gimme();
 };
 
 #endif
