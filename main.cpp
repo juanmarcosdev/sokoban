@@ -36,7 +36,11 @@ int main(int argc, char* argv[])
         }
         file.close();
     }
-    char tablero[filas][columnas];
+    char** tablero = new char*[filas];
+    for(int i = 0; i < filas; ++i)
+    {
+        tablero[i] = new char[columnas];
+    }
     int coordenadas[datos-1][2];
     int posicion[2];
     ifstream file3(argv[1]);
@@ -71,6 +75,8 @@ int main(int argc, char* argv[])
     // Tablero de juego almacenado en matriz "tablero"
     // Coordenadas iniciales de las cajas guardadas en "coordenadas"
     // Posicion inicial del jugador en "posicion"
-    GameState juego(filas, columnas);
+    GameState juego(filas, columnas, tablero);
+    juego.gimme();
+    juego.action();
     juego.gimme();
 }
