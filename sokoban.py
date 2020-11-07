@@ -27,10 +27,11 @@ def leerArchivo():
             contador = contador + 1
 
     columnas = len(Lines[0])
-    
+
     print(filas)
     print(columnas)
     print(posicion)
     print(ubicaciones_cajas)
     print(tablero)
+
 leerArchivo()
