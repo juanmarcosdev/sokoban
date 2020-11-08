@@ -31,14 +31,14 @@ def leerArchivo():
     return filas, columnas, posicion, ubicaciones_cajas, tablero
 
 class State:
-    def __init__(self, filas, columnas, posicion, ubicaciones_cajas, tablero, movimientos, cache):
+    def __init__(self, filas, columnas, posicion, ubicaciones_cajas, tablero, movimientos):
         self.filas = filas
         self.columnas = columnas
         self.posicion = posicion
         self.ubicaciones_cajas = ubicaciones_cajas
         self.tablero = tablero
         self.movimientos = movimientos
-        self.cache = cache
+        self.lugares_ideales = self.lugaresCajaIdeales()
     
     def jugadasValidas(self):
         jugadas_validas = []
@@ -52,17 +52,6 @@ class State:
         if(self.tablero[self.posicion[0]][self.posicion[1]+1] != 'W'):
             jugadas_validas.append('R')
         
-        if(([self.posicion[0]-1, self.posicion[1]] in self.ubicaciones_cajas and self.tablero[self.posicion[0]-2][self.posicion[1]] == 'W') or ([self.posicion[0]-1, self.posicion[1]] in self.ubicaciones_cajas and self.posicion[0]-1 == 0)):
-            jugadas_validas.remove('U')
-        if(([self.posicion[0]+1, self.posicion[1]] in self.ubicaciones_cajas and self.tablero[self.posicion[0]+2][self.posicion[1]] == 'W') or ([self.posicion[0]+1, self.posicion[1]] in self.ubicaciones_cajas and self.posicion[0]+1 == self.filas-1)):
-            jugadas_validas.remove('D')
-        if(([self.posicion[0], self.posicion[1]-1] in self.ubicaciones_cajas and self.tablero[self.posicion[0]][self.posicion[1]-2] == 'W') or ([self.posicion[0], self.posicion[1]-1] in self.ubicaciones_cajas and self.posicion[1]-1 == 0)):
-            jugadas_validas.remove('L')
-        if(([self.posicion[0], self.posicion[1]+1] in self.ubicaciones_cajas and self.tablero[self.posicion[0]][self.posicion[1]+2] == 'W') or ([self.posicion[0], self.posicion[1]+1] in self.ubicaciones_cajas and self.posicion[1]+1 == self.columnas-1)):
-            jugadas_validas.remove('R')
-        
-        if(str(self.posicion[0]) + "," + str(self.posicion[1]) in self.cache):
-            jugadas_validas.remove(self.cache[str(self.posicion[0]) + "," + str(self.posicion[1])])
 
         return jugadas_validas
     
@@ -75,89 +64,108 @@ class State:
         return lugares_ideales
     
     def ganeElJuego(self):
-        return self.ubicaciones_cajas == self.lugaresCajaIdeales()
+        flag = True
+        for i in range(0,len(self.lugares_ideales)):
+            if(self.lugares_ideales[i] in self.ubicaciones_cajas):
+                continue
+            else:
+                flag = False
+        return flag
 
     def estoyEnUnDeadlock(self):
-        flag = False
-        for i in range(len(self.ubicaciones_cajas)):
-            if(self.tablero[self.ubicaciones_cajas[i][0]-1][self.ubicaciones_cajas[i][1]] == 'W' and self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]-1] == 'W'):
-                flag = True
-            if(self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]-1] == 'W' and self.tablero[self.ubicaciones_cajas[i][0]+1][self.ubicaciones_cajas[i][1]] == 'W'):
-                flag = True
-            if(self.tablero[self.ubicaciones_cajas[i][0]+1][self.ubicaciones_cajas[i][1]] == 'W' and self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]+1] == 'W'):
-                flag = True
-            if(self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]+1] == 'W' and self.tablero[self.ubicaciones_cajas[i][0]-1][self.ubicaciones_cajas[i][1]] == 'W'):
-                flag = True
-        return flag
+
     
     def nuevoEstado(self, movimiento):
         if(movimiento == 'U'):
             newPosicion = [self.posicion[0]-1, self.posicion[1]]
-            if(newPosicion in self.ubicaciones_cajas):
-                nuevasCajas = self.ubicaciones_cajas
+            nuevasCajas = self.ubicaciones_cajas.copy()
+            if(newPosicion in nuevasCajas):
                 nuevasCajas.remove(newPosicion)
                 nuevasCajas.append([newPosicion[0]-1, newPosicion[1]])
-            nuevosMovimientos = self.movimientos
+            nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('U')
-            nuevoCache = self.cache
-            nuevoCache[str(self.posicion[0]) + "," + str(self.posicion[1])] = "U"
-            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, nuevoCache)
+            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
         
-        if(movimiento == 'D'):
+        elif(movimiento == 'D'):
             newPosicion = [self.posicion[0]+1, self.posicion[1]]
-            if(newPosicion in self.ubicaciones_cajas):
-                nuevasCajas = self.ubicaciones_cajas
+            nuevasCajas = self.ubicaciones_cajas.copy()
+            if(newPosicion in nuevasCajas):
                 nuevasCajas.remove(newPosicion)
                 nuevasCajas.append([newPosicion[0]+1, newPosicion[1]])
-            nuevosMovimientos = self.movimientos
+            nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('D')
-            nuevoCache = self.cache
-            nuevoCache[str(self.posicion[0]) + "," + str(self.posicion[1])] = "D"
-            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, nuevoCache)
+            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
         
-        if(movimiento == 'L'):
+        elif(movimiento == 'L'):
             newPosicion = [self.posicion[0], self.posicion[1]-1]
-            if(newPosicion in self.ubicaciones_cajas):
-                nuevasCajas = self.ubicaciones_cajas
+            nuevasCajas = self.ubicaciones_cajas.copy()
+            if(newPosicion in nuevasCajas):
                 nuevasCajas.remove(newPosicion)
                 nuevasCajas.append([newPosicion[0], newPosicion[1]-1])
-            nuevosMovimientos = self.movimientos
+            nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('L')
-            nuevoCache = self.cache
-            nuevoCache[str(self.posicion[0]) + "," + str(self.posicion[1])] = "L"
-            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, nuevoCache)
+            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
         
-        if(movimiento == 'R'):
+        elif(movimiento == 'R'):
             newPosicion = [self.posicion[0], self.posicion[1]+1]
-            if(newPosicion in self.ubicaciones_cajas):
-                nuevasCajas = self.ubicaciones_cajas
+            nuevasCajas = self.ubicaciones_cajas.copy()
+            if(newPosicion in nuevasCajas):
                 nuevasCajas.remove(newPosicion)
                 nuevasCajas.append([newPosicion[0], newPosicion[1]+1])
-            nuevosMovimientos = self.movimientos
+            nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('R')
-            nuevoCache = self.cache
-            nuevoCache[str(self.posicion[0]) + "," + str(self.posicion[1])] = "R"
-            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, nuevoCache)
+            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
 
 rows, columns, position, boxes_positions, board = leerArchivo()
 
-initialState = State(rows, columns, position, boxes_positions, board, [], {})
+initialState = State(rows, columns, position, boxes_positions, board, [])
+
+def DFS(state):
+    visited = set()
+    stack = []
+    stack.append(state)
+    while(len(stack) != 0):
+        currentState = stack[0]
+        visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]))
+        if(currentState.ganeElJuego()):
+            break
+        else:
+            if(currentState.estoyEnUnDeadlock()):
+                stack.pop(0)
+                continue
+            else:
+                validMoves = currentState.jugadasValidas()
+                for i in range(0,len(validMoves)):
+                    temporalState = currentState.nuevoEstado(validMoves[i])
+                    if(str(temporalState.posicion[0]) + "," + str(temporalState.posicion[1]) in visited):
+                        continue
+                    else:
+                        stack.append(temporalState)
+                stack.pop(0)
+    print(currentState.lugares_ideales)
+    print(currentState.ubicaciones_cajas)
+    return currentState.movimientos
+
+# print(DFS(initialState))
 
 print(initialState.posicion)
+print(initialState.movimientos)
 print(initialState.jugadasValidas())
+print(initialState.lugares_ideales)
 print(initialState.ubicaciones_cajas)
-print(initialState.lugaresCajaIdeales())
-print(initialState.ganeElJuego())
-print(initialState.estoyEnUnDeadlock())
 
-newState = initialState.nuevoEstado('D')
+# print("------------------------------")
 
-print("----------------------------------------")
+# newState = initialState.nuevoEstado('D')
 
-print(newState.posicion)
-print(newState.jugadasValidas())
-print(newState.ubicaciones_cajas)
-print(newState.lugaresCajaIdeales())
-print(newState.ganeElJuego())
-print(newState.estoyEnUnDeadlock())
+# print(newState.posicion)
+# print(newState.movimientos)
+# print(newState.jugadasValidas())
 
+# print("------------------------------")
+
+# newState2 = initialState.nuevoEstado('R')
+
+# print(newState2.posicion)
+# print(newState2.movimientos)
+# print(newState2.jugadasValidas())
