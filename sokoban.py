@@ -1,5 +1,6 @@
 import sys
 
+
 def leerArchivo():
     filas = 0
     columnas = 0
@@ -100,6 +101,10 @@ class State:
                 return True
             elif(self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]+1] == 'W' and self.tablero[self.ubicaciones_cajas[i][0]-1][self.ubicaciones_cajas[i][1]] == 'W'):
                 return True
+            elif((self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]+1] == 'W' or [self.ubicaciones_cajas[i][0],self.ubicaciones_cajas[i][1]+1] in self.ubicaciones_cajas) and (self.tablero[self.ubicaciones_cajas[i][0]+1][self.ubicaciones_cajas[i][1]] == 'W' or [self.ubicaciones_cajas[i][0]+1,self.ubicaciones_cajas[i][1]] in self.ubicaciones_cajas) and (self.tablero[self.ubicaciones_cajas[i][0]+1][self.ubicaciones_cajas[i][1]+1] == 'W' or [self.ubicaciones_cajas[i][0]+1,self.ubicaciones_cajas[i][1]+1] in self.ubicaciones_cajas)):
+                return True
+            elif((self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]-1] == 'W' or [self.ubicaciones_cajas[i][0],self.ubicaciones_cajas[i][1]-1] in self.ubicaciones_cajas) and (self.tablero[self.ubicaciones_cajas[i][0]-1][self.ubicaciones_cajas[i][1]] == 'W' or [self.ubicaciones_cajas[i][0]-1,self.ubicaciones_cajas[i][1]] in self.ubicaciones_cajas) and (self.tablero[self.ubicaciones_cajas[i][0]-1][self.ubicaciones_cajas[i][1]-1] == 'W' or [self.ubicaciones_cajas[i][0]-1,self.ubicaciones_cajas[i][1]-1] in self.ubicaciones_cajas)):
+                return True
             else:
                 return False
 
@@ -149,9 +154,22 @@ rows, columns, position, boxes_positions, board = leerArchivo()
 
 initialState = State(rows, columns, position, boxes_positions, board, [])
 
-print(initialState.posicion)
-print(initialState.movimientos)
-print(initialState.jugadasValidas())
-print(initialState.lugares_ideales)
-print(initialState.ubicaciones_cajas)
-print(initialState.estoyEnUnDeadlock())
+# print(initialState.posicion)
+# print(initialState.jugadasValidas())
+# print(initialState.ubicaciones_cajas)
+
+# newState = initialState.nuevoEstado('D')
+
+# print(newState.posicion)
+# print(newState.jugadasValidas())
+# print(newState.ubicaciones_cajas)
+
+# newState2 = newState.nuevoEstado('R')
+
+# print(newState2.posicion)
+# print(newState2.jugadasValidas())
+# print(newState2.ubicaciones_cajas)
+
+
+
+
