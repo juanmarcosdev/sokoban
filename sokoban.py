@@ -52,6 +52,24 @@ class State:
         if(self.tablero[self.posicion[0]][self.posicion[1]+1] != 'W'):
             jugadas_validas.append('R')
         
+        for item in jugadas_validas:
+            if(item == 'U'):
+                if([self.posicion[0]-1, self.posicion[1]] in self.ubicaciones_cajas):
+                    if([self.posicion[0]-2, self.posicion[1]] in self.ubicaciones_cajas or self.tablero[self.posicion[0]-2][self.posicion[1]] == 'W'):
+                        jugadas_validas.remove('U')
+            if(item == 'D'):
+                if([self.posicion[0]+1, self.posicion[1]] in self.ubicaciones_cajas):
+                    if([self.posicion[0]+2, self.posicion[1]] in self.ubicaciones_cajas or self.tablero[self.posicion[0]+2][self.posicion[1]] == 'W'):
+                        jugadas_validas.remove('D')
+            if(item == 'L'):
+                if([self.posicion[0], self.posicion[1]-1] in self.ubicaciones_cajas):
+                    if([self.posicion[0], self.posicion[1]-2] in self.ubicaciones_cajas or self.tablero[self.posicion[0]][self.posicion[1]-2] == 'W'):
+                        jugadas_validas.remove('L')
+            if(item == 'R'):
+                if([self.posicion[0], self.posicion[1]+1] in self.ubicaciones_cajas):
+                    if([self.posicion[0], self.posicion[1]+2] in self.ubicaciones_cajas or self.tablero[self.posicion[0]][self.posicion[1]+2] == 'W'):
+                        jugadas_validas.remove('R')
+                
 
         return jugadas_validas
     
@@ -73,6 +91,17 @@ class State:
         return flag
 
     def estoyEnUnDeadlock(self):
+        for i in range(0,len(self.ubicaciones_cajas)):
+            if(self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]+1] == 'W' and self.tablero[self.ubicaciones_cajas[i][0]+1][self.ubicaciones_cajas[i][1]] == 'W'):
+                return True
+            elif(self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]-1] == 'W' and self.tablero[self.ubicaciones_cajas[i][0]+1][self.ubicaciones_cajas[i][1]] == 'W'):
+                return True
+            elif(self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]-1] == 'W' and self.tablero[self.ubicaciones_cajas[i][0]-1][self.ubicaciones_cajas[i][1]] == 'W'):
+                return True
+            elif(self.tablero[self.ubicaciones_cajas[i][0]][self.ubicaciones_cajas[i][1]+1] == 'W' and self.tablero[self.ubicaciones_cajas[i][0]-1][self.ubicaciones_cajas[i][1]] == 'W'):
+                return True
+            else:
+                return False
 
     
     def nuevoEstado(self, movimiento):
@@ -120,52 +149,9 @@ rows, columns, position, boxes_positions, board = leerArchivo()
 
 initialState = State(rows, columns, position, boxes_positions, board, [])
 
-def DFS(state):
-    visited = set()
-    stack = []
-    stack.append(state)
-    while(len(stack) != 0):
-        currentState = stack[0]
-        visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]))
-        if(currentState.ganeElJuego()):
-            break
-        else:
-            if(currentState.estoyEnUnDeadlock()):
-                stack.pop(0)
-                continue
-            else:
-                validMoves = currentState.jugadasValidas()
-                for i in range(0,len(validMoves)):
-                    temporalState = currentState.nuevoEstado(validMoves[i])
-                    if(str(temporalState.posicion[0]) + "," + str(temporalState.posicion[1]) in visited):
-                        continue
-                    else:
-                        stack.append(temporalState)
-                stack.pop(0)
-    print(currentState.lugares_ideales)
-    print(currentState.ubicaciones_cajas)
-    return currentState.movimientos
-
-# print(DFS(initialState))
-
 print(initialState.posicion)
 print(initialState.movimientos)
 print(initialState.jugadasValidas())
 print(initialState.lugares_ideales)
 print(initialState.ubicaciones_cajas)
-
-# print("------------------------------")
-
-# newState = initialState.nuevoEstado('D')
-
-# print(newState.posicion)
-# print(newState.movimientos)
-# print(newState.jugadasValidas())
-
-# print("------------------------------")
-
-# newState2 = initialState.nuevoEstado('R')
-
-# print(newState2.posicion)
-# print(newState2.movimientos)
-# print(newState2.jugadasValidas())
+print(initialState.estoyEnUnDeadlock())
