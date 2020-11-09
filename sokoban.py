@@ -222,22 +222,3 @@ dfsResponse, auxiliarDFS = DFS()
 
 print(listToString(bfsResponse.movimientos))
 print(listToString(dfsResponse.movimientos))
-
-# for i in range(0,10):
-#     print(auxiliarDFS[i].posicion)
-#     print(auxiliarDFS[i].ubicaciones_cajas)
-#     print(auxiliarDFS[i].movimientos)
-#     print(auxiliarDFS[i].jugadasValidas())
-#     print("--------------------------------")
-
-# print(initialState.posicion)
-# print(initialState.jugadasValidas())
-# print(initialState.ubicaciones_cajas)
-
-# newState = initialState.nuevoEstado('D')
-
-# print("------------------------------------")
-
-# print(newState.posicion)
-# print(newState.jugadasValidas())
-# print(newState.ubicaciones_cajas)
