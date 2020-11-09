@@ -114,8 +114,9 @@ class State:
             newPosicion = [self.posicion[0]-1, self.posicion[1]]
             nuevasCajas = self.ubicaciones_cajas.copy()
             if(newPosicion in nuevasCajas):
-                nuevasCajas.remove(newPosicion)
-                nuevasCajas.append([newPosicion[0]-1, newPosicion[1]])
+                for i in range(0,len(nuevasCajas)):
+                    if(nuevasCajas[i] == newPosicion):
+                        nuevasCajas[i] = [newPosicion[0]-1, newPosicion[1]]
             nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('U')
             return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
@@ -124,8 +125,9 @@ class State:
             newPosicion = [self.posicion[0]+1, self.posicion[1]]
             nuevasCajas = self.ubicaciones_cajas.copy()
             if(newPosicion in nuevasCajas):
-                nuevasCajas.remove(newPosicion)
-                nuevasCajas.append([newPosicion[0]+1, newPosicion[1]])
+                for i in range(0,len(nuevasCajas)):
+                    if(nuevasCajas[i] == newPosicion):
+                        nuevasCajas[i] = [newPosicion[0]+1, newPosicion[1]]
             nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('D')
             return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
@@ -134,8 +136,9 @@ class State:
             newPosicion = [self.posicion[0], self.posicion[1]-1]
             nuevasCajas = self.ubicaciones_cajas.copy()
             if(newPosicion in nuevasCajas):
-                nuevasCajas.remove(newPosicion)
-                nuevasCajas.append([newPosicion[0], newPosicion[1]-1])
+                for i in range(0,len(nuevasCajas)):
+                    if(nuevasCajas[i] == newPosicion):
+                        nuevasCajas[i] = [newPosicion[0], newPosicion[1]-1]
             nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('L')
             return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
@@ -144,8 +147,9 @@ class State:
             newPosicion = [self.posicion[0], self.posicion[1]+1]
             nuevasCajas = self.ubicaciones_cajas.copy()
             if(newPosicion in nuevasCajas):
-                nuevasCajas.remove(newPosicion)
-                nuevasCajas.append([newPosicion[0], newPosicion[1]+1])
+                for i in range(0,len(nuevasCajas)):
+                    if(nuevasCajas[i] == newPosicion):
+                        nuevasCajas[i] = [newPosicion[0], newPosicion[1]+1]
             nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('R')
             return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
@@ -154,9 +158,42 @@ rows, columns, position, boxes_positions, board = leerArchivo()
 
 initialState = State(rows, columns, position, boxes_positions, board, [])
 
+def BFS():
+    queue = []
+    queue.append(initialState)
+    aux = []
+    visited = set()
+    while queue:
+        currentState = queue.pop(0)
+        aux.append(currentState)
+        visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]))
+        # print(currentState.posicion)
+        if(currentState.estoyEnUnDeadlock()):
+            continue
+        else:
+            if(currentState.ganeElJuego()):
+                break
+            jugadas_validas = currentState.jugadasValidas()
+            for item in jugadas_validas:
+                tempState = currentState.nuevoEstado(item)
+                if(str(tempState.posicion[0]) + "," + str(tempState.posicion[1]) in visited):
+                    continue
+                else:
+                    queue.append(tempState)
+    return currentState, aux
+
+# cS, auxiliar = BFS()
+
+# print(cS.movimientos)
+
+# for element in auxiliar:
+#     print(element.posicion)
+
+
 # print(initialState.posicion)
 # print(initialState.jugadasValidas())
 # print(initialState.ubicaciones_cajas)
+# print(initialState.ganeElJuego())
 
 # newState = initialState.nuevoEstado('D')
 
