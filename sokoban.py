@@ -1,15 +1,10 @@
 import sys
+from collections import deque 
 
 def listToString(s):  
-    
-    # initialize an empty string 
     str1 = ""  
-    
-    # traverse in the string   
     for ele in s:  
         str1 += ele   
-    
-    # return string   
     return str1
 
 def ubicacionesCajaToString(arreglo):
@@ -176,15 +171,14 @@ rows, columns, position, boxes_positions, board = leerArchivo()
 initialState = State(rows, columns, position, boxes_positions, board, [])
 
 def BFS():
-    queue = []
+    queue = deque()
     queue.append(initialState)
     aux = []
     visited = set()
     while queue:
-        currentState = queue.pop(0)
+        currentState = queue.popleft()
         aux.append(currentState)
         visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]) + ubicacionesCajaToString(currentState.ubicaciones_cajas))
-        # print(currentState.posicion)
         if(currentState.estoyEnUnDeadlock()):
             continue
         else:
@@ -199,31 +193,50 @@ def BFS():
                     queue.append(tempState)
     return currentState, aux
 
-bfsResponse, auxiliarBFS = BFS()
+def DFS():
+    stack = deque()
+    stack.append(initialState)
+    aux = []
+    visited = set()
+    while stack:
+        currentState = stack.pop()
+        aux.append(currentState)
+        visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]) + ubicacionesCajaToString(currentState.ubicaciones_cajas))
+        if(currentState.estoyEnUnDeadlock()):
+            continue
+        else:
+            if(currentState.ganeElJuego()):
+                break
+            jugadas_validas = currentState.jugadasValidas()
+            for item in jugadas_validas:
+                tempState = currentState.nuevoEstado(item)
+                if(str(tempState.posicion[0]) + "," + str(tempState.posicion[1]) + ubicacionesCajaToString(tempState.ubicaciones_cajas) in visited):
+                    continue
+                else:
+                    stack.append(tempState)
+    return currentState, aux
 
-print(listToString(bfsResponse.movimientos))
+# bfsResponse, auxiliarBFS = BFS()
+dfsResponse, auxiliarDFS = DFS()
 
-# for element in auxiliar:
-#     print(element.posicion)
+# print(listToString(bfsResponse.movimientos))
+print(listToString(dfsResponse.movimientos))
 
+# for i in range(0,10):
+#     print(auxiliarDFS[i].posicion)
+#     print(auxiliarDFS[i].ubicaciones_cajas)
+#     print(auxiliarDFS[i].movimientos)
+#     print(auxiliarDFS[i].jugadasValidas())
+#     print("--------------------------------")
 
 # print(initialState.posicion)
 # print(initialState.jugadasValidas())
 # print(initialState.ubicaciones_cajas)
-# print(initialState.ganeElJuego())
 
 # newState = initialState.nuevoEstado('D')
+
+# print("------------------------------------")
 
 # print(newState.posicion)
 # print(newState.jugadasValidas())
 # print(newState.ubicaciones_cajas)
-
-# newState2 = newState.nuevoEstado('R')
-
-# print(newState2.posicion)
-# print(newState2.jugadasValidas())
-# print(newState2.ubicaciones_cajas)
-
-
-
-
