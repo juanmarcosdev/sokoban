@@ -1,5 +1,22 @@
 import sys
 
+def listToString(s):  
+    
+    # initialize an empty string 
+    str1 = ""  
+    
+    # traverse in the string   
+    for ele in s:  
+        str1 += ele   
+    
+    # return string   
+    return str1
+
+def ubicacionesCajaToString(arreglo):
+    string = ""
+    for i in range(0,len(arreglo)):
+        string = string + "(" + str(arreglo[i][0]) + "," + str(arreglo[i][1]) + ")"
+    return string
 
 def leerArchivo():
     filas = 0
@@ -166,7 +183,7 @@ def BFS():
     while queue:
         currentState = queue.pop(0)
         aux.append(currentState)
-        visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]))
+        visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]) + ubicacionesCajaToString(currentState.ubicaciones_cajas))
         # print(currentState.posicion)
         if(currentState.estoyEnUnDeadlock()):
             continue
@@ -176,15 +193,15 @@ def BFS():
             jugadas_validas = currentState.jugadasValidas()
             for item in jugadas_validas:
                 tempState = currentState.nuevoEstado(item)
-                if(str(tempState.posicion[0]) + "," + str(tempState.posicion[1]) in visited):
+                if(str(tempState.posicion[0]) + "," + str(tempState.posicion[1]) + ubicacionesCajaToString(tempState.ubicaciones_cajas) in visited):
                     continue
                 else:
                     queue.append(tempState)
     return currentState, aux
 
-# cS, auxiliar = BFS()
+cS, auxiliar = BFS()
 
-# print(cS.movimientos)
+print(listToString(cS.movimientos))
 
 # for element in auxiliar:
 #     print(element.posicion)
