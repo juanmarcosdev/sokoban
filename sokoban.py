@@ -199,9 +199,9 @@ def BFS():
                     queue.append(tempState)
     return currentState, aux
 
-cS, auxiliar = BFS()
+bfsResponse, auxiliarBFS = BFS()
 
-print(listToString(cS.movimientos))
+print(listToString(bfsResponse.movimientos))
 
 # for element in auxiliar:
 #     print(element.posicion)
