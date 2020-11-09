@@ -44,7 +44,7 @@ def leerArchivo():
     return filas, columnas, posicion, ubicaciones_cajas, tablero
 
 class State:
-    def __init__(self, filas, columnas, posicion, ubicaciones_cajas, tablero, movimientos):
+    def __init__(self, filas, columnas, posicion, ubicaciones_cajas, tablero, movimientos, profundidad):
         self.filas = filas
         self.columnas = columnas
         self.posicion = posicion
@@ -52,6 +52,7 @@ class State:
         self.tablero = tablero
         self.movimientos = movimientos
         self.lugares_ideales = self.lugaresCajaIdeales()
+        self.profundidad = profundidad
     
     def jugadasValidas(self):
         jugadas_validas = []
@@ -121,7 +122,7 @@ class State:
                         nuevasCajas[i] = [newPosicion[0]-1, newPosicion[1]]
             nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('U')
-            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
+            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, self.profundidad + 1)
         
         elif(movimiento == 'D'):
             newPosicion = [self.posicion[0]+1, self.posicion[1]]
@@ -132,7 +133,7 @@ class State:
                         nuevasCajas[i] = [newPosicion[0]+1, newPosicion[1]]
             nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('D')
-            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
+            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, self.profundidad + 1)
         
         elif(movimiento == 'L'):
             newPosicion = [self.posicion[0], self.posicion[1]-1]
@@ -143,7 +144,7 @@ class State:
                         nuevasCajas[i] = [newPosicion[0], newPosicion[1]-1]
             nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('L')
-            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
+            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, self.profundidad + 1)
         
         elif(movimiento == 'R'):
             newPosicion = [self.posicion[0], self.posicion[1]+1]
@@ -154,11 +155,11 @@ class State:
                         nuevasCajas[i] = [newPosicion[0], newPosicion[1]+1]
             nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('R')
-            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos)
+            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, self.profundidad + 1)
 
 rows, columns, position, boxes_positions, board = leerArchivo()
 
-initialState = State(rows, columns, position, boxes_positions, board, [])
+initialState = State(rows, columns, position, boxes_positions, board, [], 0)
 
 def BFS():
     queue = deque()
@@ -167,6 +168,8 @@ def BFS():
     visited = set()
     while queue:
         currentState = queue.popleft()
+        if(currentState.profundidad > 64):
+            continue
         aux.append(currentState)
         visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]) + ubicacionesCajaToString(currentState.ubicaciones_cajas))
         if(currentState.estoyEnUnDeadlock()):
@@ -190,6 +193,8 @@ def DFS():
     visited = set()
     while stack:
         currentState = stack.pop()
+        if(currentState.profundidad > 64):
+            continue
         aux.append(currentState)
         visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]) + ubicacionesCajaToString(currentState.ubicaciones_cajas))
         if(currentState.estoyEnUnDeadlock()):
@@ -207,13 +212,13 @@ def DFS():
                     stack.append(tempState)
     return currentState, aux
 
-# print(initialState.jugadasValidas())
 
-bfsResponse, auxiliarBFS = BFS()
+# bfsResponse, auxiliarBFS = BFS()
+# print(listToString(bfsResponse.movimientos) + " " + str(bfsResponse.profundidad))
+
+
 dfsResponse, auxiliarDFS = DFS()
-
-print(listToString(bfsResponse.movimientos))
-print(listToString(dfsResponse.movimientos))
+print(listToString(dfsResponse.movimientos) + " " + str(dfsResponse.profundidad))
 
 
 # algoritmo = sys.argv[2]
