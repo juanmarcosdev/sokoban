@@ -64,25 +64,15 @@ class State:
             jugadas_validas.append('L')
         if(self.tablero[self.posicion[0]][self.posicion[1]+1] != 'W'):
             jugadas_validas.append('R')
-        
-        for item in jugadas_validas:
-            if(item == 'U'):
-                if([self.posicion[0]-1, self.posicion[1]] in self.ubicaciones_cajas):
-                    if([self.posicion[0]-2, self.posicion[1]] in self.ubicaciones_cajas or self.tablero[self.posicion[0]-2][self.posicion[1]] == 'W'):
-                        jugadas_validas.remove('U')
-            if(item == 'D'):
-                if([self.posicion[0]+1, self.posicion[1]] in self.ubicaciones_cajas):
-                    if([self.posicion[0]+2, self.posicion[1]] in self.ubicaciones_cajas or self.tablero[self.posicion[0]+2][self.posicion[1]] == 'W'):
-                        jugadas_validas.remove('D')
-            if(item == 'L'):
-                if([self.posicion[0], self.posicion[1]-1] in self.ubicaciones_cajas):
-                    if([self.posicion[0], self.posicion[1]-2] in self.ubicaciones_cajas or self.tablero[self.posicion[0]][self.posicion[1]-2] == 'W'):
-                        jugadas_validas.remove('L')
-            if(item == 'R'):
-                if([self.posicion[0], self.posicion[1]+1] in self.ubicaciones_cajas):
-                    if([self.posicion[0], self.posicion[1]+2] in self.ubicaciones_cajas or self.tablero[self.posicion[0]][self.posicion[1]+2] == 'W'):
-                        jugadas_validas.remove('R')
-                
+
+        if([self.posicion[0]-1,self.posicion[1]] in self.ubicaciones_cajas and (self.tablero[self.posicion[0]-2][self.posicion[1]] == 'W' or [self.posicion[0]-2,self.posicion[1]] in self.ubicaciones_cajas)):
+            jugadas_validas.remove('U')
+        if([self.posicion[0]+1,self.posicion[1]] in self.ubicaciones_cajas and (self.tablero[self.posicion[0]+2][self.posicion[1]] == 'W' or [self.posicion[0]+2,self.posicion[1]] in self.ubicaciones_cajas)):
+            jugadas_validas.remove('D')
+        if([self.posicion[0],self.posicion[1]-1] in self.ubicaciones_cajas and (self.tablero[self.posicion[0]][self.posicion[1]-2] == 'W' or [self.posicion[0],self.posicion[1]-2] in self.ubicaciones_cajas)):
+            jugadas_validas.remove('L')
+        if([self.posicion[0],self.posicion[1]+1] in self.ubicaciones_cajas and (self.tablero[self.posicion[0]][self.posicion[1]+2] == 'W' or [self.posicion[0],self.posicion[1]+2] in self.ubicaciones_cajas)):
+            jugadas_validas.remove('R')
 
         return jugadas_validas
     
@@ -217,8 +207,19 @@ def DFS():
                     stack.append(tempState)
     return currentState, aux
 
+# print(initialState.jugadasValidas())
+
 bfsResponse, auxiliarBFS = BFS()
 dfsResponse, auxiliarDFS = DFS()
 
 print(listToString(bfsResponse.movimientos))
 print(listToString(dfsResponse.movimientos))
+
+
+# algoritmo = sys.argv[2]
+# if(algoritmo == "BFS"):
+#     bfsResponse, auxiliarBFS = BFS()
+#     print(listToString(bfsResponse.movimientos))
+# if(algoritmo == "DFS"):
+#     dfsResponse, auxiliarDFS = DFS()
+#     print(listToString(dfsResponse.movimientos))
