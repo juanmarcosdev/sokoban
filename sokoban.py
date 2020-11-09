@@ -208,6 +208,7 @@ def DFS():
             if(currentState.ganeElJuego()):
                 break
             jugadas_validas = currentState.jugadasValidas()
+            jugadas_validas.reverse()
             for item in jugadas_validas:
                 tempState = currentState.nuevoEstado(item)
                 if(str(tempState.posicion[0]) + "," + str(tempState.posicion[1]) + ubicacionesCajaToString(tempState.ubicaciones_cajas) in visited):
@@ -216,10 +217,10 @@ def DFS():
                     stack.append(tempState)
     return currentState, aux
 
-# bfsResponse, auxiliarBFS = BFS()
+bfsResponse, auxiliarBFS = BFS()
 dfsResponse, auxiliarDFS = DFS()
 
-# print(listToString(bfsResponse.movimientos))
+print(listToString(bfsResponse.movimientos))
 print(listToString(dfsResponse.movimientos))
 
 # for i in range(0,10):
