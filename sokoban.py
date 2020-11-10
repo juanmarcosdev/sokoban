@@ -193,6 +193,11 @@ def DFS():
     visited = set()
     while stack:
         currentState = stack.pop()
+        if(currentState.posicion == [5,4] and currentState.profundidad == 52):
+                print("----------------------")
+                print(currentState.posicion)
+                print(currentState.ubicaciones_cajas)
+                print(currentState.jugadasValidas())
         if(currentState.profundidad > 64):
             continue
         aux.append(currentState)
@@ -207,9 +212,16 @@ def DFS():
             for item in jugadas_validas:
                 tempState = currentState.nuevoEstado(item)
                 if(str(tempState.posicion[0]) + "," + str(tempState.posicion[1]) + ubicacionesCajaToString(tempState.ubicaciones_cajas) in visited):
+                    if(currentState.posicion == [5,4] and currentState.profundidad == 52):
+                        print("----------------------")
+                        print("Me chulie a " + str(tempState.posicion) + " , movimiento: " + item + " isDeadlock: " + str(tempState.estoyEnUnDeadlock()))
                     continue
                 else:
                     stack.append(tempState)
+                    if(currentState.posicion == [5,4] and currentState.profundidad == 52):
+                        print("----------------------")
+                        print("Explorare " + str(tempState.posicion) + " , movimiento: " + item + " isDeadlock: " + str(tempState.estoyEnUnDeadlock()))
+                        print(listToString(stack[len(stack)-1].movimientos))
     return currentState, aux
 
 
