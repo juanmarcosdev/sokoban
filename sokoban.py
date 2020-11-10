@@ -155,7 +155,7 @@ class State:
                         nuevasCajas[i] = [newPosicion[0], newPosicion[1]+1]
             nuevosMovimientos = self.movimientos.copy()
             nuevosMovimientos.append('R')
-            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, self.profundidad + 1)
+            return State(self.filas, self.columnas, newPosicion, nuevasCajas, self.tablero, nuevosMovimientos, self.profundidad + 1,)
 
 rows, columns, position, boxes_positions, board = leerArchivo()
 
@@ -193,11 +193,12 @@ def DFS():
     visited = set()
     while stack:
         currentState = stack.pop()
-        if(currentState.posicion == [5,4] and currentState.profundidad == 52):
-                print("----------------------")
-                print(currentState.posicion)
-                print(currentState.ubicaciones_cajas)
-                print(currentState.jugadasValidas())
+        # if(currentState.posicion == [5,4] and currentState.profundidad == 52 and currentState.ubicaciones_cajas == [[4,4],[2,3]]):
+        #         print("----------------------")
+        #         print(currentState.posicion)
+        #         print(currentState.ubicaciones_cajas)
+        #         print(currentState.jugadasValidas())
+        #         break
         if(currentState.profundidad > 64):
             continue
         aux.append(currentState)
@@ -212,25 +213,59 @@ def DFS():
             for item in jugadas_validas:
                 tempState = currentState.nuevoEstado(item)
                 if(str(tempState.posicion[0]) + "," + str(tempState.posicion[1]) + ubicacionesCajaToString(tempState.ubicaciones_cajas) in visited):
-                    if(currentState.posicion == [5,4] and currentState.profundidad == 52):
-                        print("----------------------")
-                        print("Me chulie a " + str(tempState.posicion) + " , movimiento: " + item + " isDeadlock: " + str(tempState.estoyEnUnDeadlock()))
+                    # if(currentState.posicion == [5,4] and currentState.profundidad == 52 and currentState.ubicaciones_cajas == [[4,4],[2,3]]):
+                    #     print("----------------------")
+                    #     print("Me chulie a " + str(tempState.posicion) + " , movimiento: " + item + " isDeadlock: " + str(tempState.estoyEnUnDeadlock()))
                     continue
                 else:
                     stack.append(tempState)
-                    if(currentState.posicion == [5,4] and currentState.profundidad == 52):
-                        print("----------------------")
-                        print("Explorare " + str(tempState.posicion) + " , movimiento: " + item + " isDeadlock: " + str(tempState.estoyEnUnDeadlock()))
-                        print(listToString(stack[len(stack)-1].movimientos))
+                    # if(currentState.posicion == [5,4] and currentState.profundidad == 52 and currentState.ubicaciones_cajas == [[4,4],[2,3]]):
+                    #     print("----------------------")
+                    #     print("Explorare " + str(tempState.posicion) + " , movimiento: " + item + " isDeadlock: " + str(tempState.estoyEnUnDeadlock()))
+                    #     print(listToString(stack[len(stack)-1].movimientos))
     return currentState, aux
 
 
 # bfsResponse, auxiliarBFS = BFS()
 # print(listToString(bfsResponse.movimientos) + " " + str(bfsResponse.profundidad))
 
-
+# DFS Level 3
+# DDDRRURDRUULDDLLLUUURRURDULDDUURDDUULDDLULDDDRRUUDDRURULULDLLUR
 dfsResponse, auxiliarDFS = DFS()
-print(listToString(dfsResponse.movimientos) + " " + str(dfsResponse.profundidad))
+print(listToString(dfsResponse.movimientos) + " " + str(dfsResponse.profundidad) + " " + str(dfsResponse.ganeElJuego()) + " " + str(dfsResponse.jugadasValidas()))
+
+# newState1 = dfsResponse.nuevoEstado('U')
+# print(listToString(newState1.movimientos) + " " + str(newState1.profundidad) + " " + str(newState1.ganeElJuego()) + " " + str(newState1.jugadasValidas()))
+
+# newState2 = newState1.nuevoEstado('R')
+# print(listToString(newState2.movimientos) + " " + str(newState2.profundidad) + " " + str(newState2.ganeElJuego()) + " " + str(newState2.jugadasValidas()))
+
+# newState3 = newState2.nuevoEstado('U')
+# print(listToString(newState3.movimientos) + " " + str(newState3.profundidad) + " " + str(newState3.ganeElJuego()) + " " + str(newState3.jugadasValidas()))
+
+# newState4 = newState3.nuevoEstado('L')
+# print(listToString(newState4.movimientos) + " " + str(newState4.profundidad) + " " + str(newState4.ganeElJuego()) + " " + str(newState4.jugadasValidas()))
+
+# newState5 = newState4.nuevoEstado('U')
+# print(listToString(newState5.movimientos) + " " + str(newState5.profundidad) + " " + str(newState5.ganeElJuego()) + " " + str(newState5.jugadasValidas()))
+
+# newState6 = newState5.nuevoEstado('L')
+# print(listToString(newState6.movimientos) + " " + str(newState6.profundidad) + " " + str(newState6.ganeElJuego()) + " " + str(newState6.jugadasValidas()))
+
+# newState7 = newState6.nuevoEstado('D')
+# print(listToString(newState7.movimientos) + " " + str(newState7.profundidad) + " " + str(newState7.ganeElJuego()) + " " + str(newState7.jugadasValidas()))
+
+# newState8 = newState7.nuevoEstado('L')
+# print(listToString(newState8.movimientos) + " " + str(newState8.profundidad) + " " + str(newState8.ganeElJuego()) + " " + str(newState8.jugadasValidas()))
+
+# newState9 = newState8.nuevoEstado('L')
+# print(listToString(newState9.movimientos) + " " + str(newState9.profundidad) + " " + str(newState9.ganeElJuego()) + " " + str(newState9.jugadasValidas()))
+
+# newState10 = newState9.nuevoEstado('U')
+# print(listToString(newState10.movimientos) + " " + str(newState10.profundidad) + " " + str(newState10.ganeElJuego()) + " " + str(newState10.jugadasValidas()))
+
+# newState11 = newState10.nuevoEstado('R')
+# print(listToString(newState11.movimientos) + " " + str(newState11.profundidad) + " " + str(newState11.ganeElJuego()) + " " + str(newState11.jugadasValidas()))
 
 
 # algoritmo = sys.argv[2]
