@@ -167,6 +167,8 @@ def BFS():
     visited = set()
     while queue:
         currentState = queue.popleft()
+        if(currentState.profundidad > 64):
+            continue
         visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]) + ubicacionesCajaToString(currentState.ubicaciones_cajas))
         if(currentState.estoyEnUnDeadlock()):
             continue
@@ -187,6 +189,8 @@ def DFS():
     visited = set()
     while stack:
         currentState = stack.pop()
+        if(currentState.profundidad > 64):
+            continue
         visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]) + ubicacionesCajaToString(currentState.ubicaciones_cajas))
         if(currentState.estoyEnUnDeadlock()):
             continue
