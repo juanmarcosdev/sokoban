@@ -207,12 +207,15 @@ def DFS():
                     stack.append(tempState)
     return currentState
 
-def IDFS():
+def IDFS(limite):
     stack = deque()
     stack.append(initialState)
     visited = set()
+    profundidad = 0
     while stack:
         currentState = stack.pop()
+        if(currentState.profundidad == limite):
+            return currentState
         if(currentState.profundidad > 64):
             continue
         visited.add(str(currentState.posicion[0]) + "," + str(currentState.posicion[1]) + ubicacionesCajaToString(currentState.ubicaciones_cajas))
@@ -231,14 +234,24 @@ def IDFS():
                     stack.append(tempState)
     return currentState
 
+def executeIDFS():
+    limite = 0
+    encontreSol = False
+    while(not encontreSol):
+        posibleSol = IDFS(limite)
+        if(posibleSol.ganeElJuego()):
+            encontreSol = True
+            return posibleSol
+        else:
+            limite = limite + 1
 
 algoritmo = sys.argv[2]
 if(algoritmo == "BFS"):
     bfsResponse = BFS()
-    print(listToString(bfsResponse.movimientos))
+    print(listToString(bfsResponse.movimientos) + " " + str(bfsResponse.profundidad))
 if(algoritmo == "DFS"):
     dfsResponse = DFS()
-    print(listToString(dfsResponse.movimientos))
+    print(listToString(dfsResponse.movimientos) + " " + str(dfsResponse.profundidad))
 if(algoritmo == "IDFS"):
-    idfsResponse = IDFS()
-    print(listToString(idfsResponse.movimientos))
+    idfsResponse = executeIDFS()
+    print(listToString(idfsResponse.movimientos) + " " + str(idfsResponse.profundidad))
