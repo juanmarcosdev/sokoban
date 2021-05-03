@@ -1,5 +1,5 @@
 <h1>TL;DR for this repo:</h1>
-<img src="http://assets.stickpng.com/images/5848152fcef1014c0b5e4967.png" height="100" width="100">
+<img src="https://image.pngaaa.com/282/619282-middle.png" height="100" width="100">
 <ul>
   <li><h4>Programming Language used:</h4>Python</li>
   <li><h4>Approximate date:</h4>Second semester of 2020</li>
