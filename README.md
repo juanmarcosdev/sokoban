@@ -1,5 +1,5 @@
 <h1>TL;DR for this repo:</h1>
-<img src="https://image.pngaaa.com/282/619282-middle.png" height="100" width="100">
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" height="100" width="100">
 <ul>
   <li><h4>Programming Language used:</h4>Python</li>
   <li><h4>Approximate date:</h4>Second semester of 2020</li>
